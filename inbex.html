@@ -3,153 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Номера — Bellavista Style</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <title>Rooms & Suites — Bellavista Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #c5a059;
-            --dark: #1a1a1a;
-            --light: #f9f9f9;
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --accent: #9a845f; /* Тот самый приглушенный золотой */
+            --transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--light);
-            color: var(--dark);
+            overflow-x: hidden;
         }
 
-        header {
+        /* Заголовок страницы */
+        .hero-section {
+            padding: 120px 0 60px;
             text-align: center;
-            padding: 60px 20px;
         }
 
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-style: italic;
-            color: var(--gold);
-            font-size: 1.1rem;
-        }
-
-        /* Контейнер для карточек */
-        .rooms-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .room-card {
-            display: flex;
-            flex-direction: row;
-            background: white;
-            margin-bottom: 80px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .room-card:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        .room-image {
-            flex: 1.2;
-            min-height: 450px;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .room-info {
-            flex: 1;
-            padding: 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .room-info h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            margin-top: 0;
-        }
-
-        .room-description {
-            line-height: 1.8;
-            color: #666;
-            margin: 20px 0;
+        .hero-section h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 300;
-        }
-
-        .btn-discover {
-            display: inline-block;
-            padding: 12px 30px;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            text-decoration: none;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-            align-self: flex-start;
-            transition: all 0.3s ease;
         }
 
-        .btn-discover:hover {
-            background: var(--gold);
+        /* Сетка номеров */
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Две колонки как в оригинале */
+            width: 100%;
+        }
+
+        .room-item {
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
             color: white;
         }
 
-        /* Адаптивность для мобилок */
-        @media (max-width: 768px) {
-            .room-card, .room-card:nth-child(even) {
-                flex-direction: column;
-            }
-            .room-image {
-                min-height: 300px;
-            }
-            .room-info {
-                padding: 30px;
-            }
+        .room-image {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: var(--transition);
+            transform: scale(1.05);
+        }
+
+        .room-item:hover .room-image {
+            transform: scale(1);
+        }
+
+        /* Оверлей и контент */
+        .room-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 60px;
+            transition: var(--transition);
+        }
+
+        .room-item:hover .room-overlay {
+            background: rgba(0,0,0,0.4);
+        }
+
+        .room-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .room-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .view-details {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(255,255,255,0.5);
+            width: fit-content;
+            padding-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .room-item:hover .view-details {
+            border-color: white;
+            padding-left: 10px;
+        }
+
+        /* Адаптация под мобильные устройства */
+        @media (max-width: 900px) {
+            .rooms-grid { grid-template-columns: 1fr; }
+            .room-item { height: 60vh; }
+            .room-overlay { padding: 30px; }
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Наши Номера</h1>
-    <p class="subtitle">Исключительный комфорт с видом на Альпы</p>
-</header>
+    <section class="hero-section">
+        <p style="letter-spacing: 5px; font-size: 0.8rem; margin-bottom: 20px; color: var(--accent);">EXPERIENCE</p>
+        <h1>Rooms & Suites</h1>
+    </section>
 
-<section class="rooms-container">
-    
-    <article class="room-card">
-        <div class="room-image" style="background-image: url('https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80');"></div>
-        <div class="room-info">
-            <h2>Deluxe Suite</h2>
-            <p class="room-description">
-                Просторный номер с панорамными окнами, где классический итальянский дизайн встречается с современным уютом. Идеально для романтического вечера.
-            </p>
-            <a href="#" class="btn-discover">Подробнее</a>
-        </div>
-    </article>
+    <main class="rooms-grid">
+        <a href="#" class="room-item">
+            <div class="room-image" style="background-image: url('https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="room-overlay">
+                <div class="room-category">Luxe Collection</div>
+                <h2 class="room-title">Presidential Suite</h2>
+                <div class="view-details">Explore the room</div>
+            </div>
+        </a>
 
-    <article class="room-card">
-        <div class="room-image" style="background-image: url('https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80');"></div>
-        <div class="room-info">
-            <h2>Panoramic Junior</h2>
-            <p class="room-description">
-                Наслаждайтесь утренним кофе на собственной террасе с захватывающим видом на озеро и горы. Тишина и спокойствие в каждой детали.
-            </p>
-            <a href="#" class="btn-discover">Подробнее</a>
-        </div>
-    </article>
+        <a href="#" class="room-item">
+            <div class="room-image" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="room-overlay">
+                <div class="room-category">Mountain View</div>
+                <h2 class="room-title">Junior Suite High</h2>
+                <div class="view-details">Explore the room</div>
+            </div>
+        </a>
 
-</section>
+        <a href="#" class="room-item">
+            <div class="room-image" style="background-image: url('https://images.unsplash.com/photo-1602002418082-a4443e081dd1?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="room-overlay">
+                <div class="room-category">Exclusive</div>
+                <h2 class="room-title">Panoramic Deluxe</h2>
+                <div class="view-details">Explore the room</div>
+            </div>
+        </a>
+
+        <a href="#" class="room-item">
+            <div class="room-image" style="background-image: url('https://images.unsplash.com/photo-1591088398332-8a77d399c80c?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="room-overlay">
+                <div class="room-category">Wellness</div>
+                <h2 class="room-title">Spa Garden Room</h2>
+                <div class="view-details">Explore the room</div>
+            </div>
+        </a>
+    </main>
 
 </body>
 </html>
