@@ -1,152 +1,251 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rooms - Bellavista</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Rooms & Suites - Bellavista Replica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. БАЗОВЫЕ НАСТРОЙКИ (RESET) */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-font: 'Cormorant Garamond', serif;
+            --secondary-font: 'Montserrat', sans-serif;
+            --gold: #b2945e; /* Фирменный золотой цвет */
+            --dark: #111111;
+            --white: #ffffff;
+            --overlay-color: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: var(--secondary-font);
+            background-color: var(--white);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* 2. HEADER (ШАПКА) */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference; /* Делает текст читаемым на любом фоне (как в оригинале) */
+            color: #fff;
+        }
+
+        .logo {
+            font-family: var(--primary-font);
+            font-size: 28px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        .menu-btn {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        /* 3. HERO СЕКЦИЯ (ЗАГОЛОВОК) */
+        .hero {
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .hero h1 {
+            font-family: var(--primary-font);
+            font-size: 4.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        /* 4. СЕТКА НОМЕРОВ (GRID) */
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Две колонки */
+            width: 100%;
+        }
+
+        .room-card {
+            position: relative;
+            height: 85vh; /* Высота карточки */
+            overflow: hidden;
+            border-right: 1px solid white;
+            border-bottom: 1px solid white;
+            cursor: pointer;
+        }
+
+        /* Изображение с эффектом зума */
+        .room-bg {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .room-card:hover .room-bg {
+            transform: scale(1.1);
+        }
+
+        /* Затемнение */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%);
+            transition: background 0.5s ease;
+        }
+
+        .room-card:hover .overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 20%, rgba(0,0,0,0.8) 100%);
+        }
+
+        /* Текст внутри карточки */
+        .room-info {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            color: var(--white);
+            z-index: 2;
+        }
+
+        .room-subtitle {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            display: block;
+            opacity: 0.8;
+        }
+
+        .room-title {
+            font-family: var(--primary-font);
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        /* Кнопка Discover */
+        .btn-discover {
+            display: inline-block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: white;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            opacity: 0; /* Скрыта по умолчанию */
+            transform: translateY(20px);
+        }
+
+        .room-card:hover .btn-discover {
+            opacity: 1;
+            transform: translateY(0);
+            border-bottom-color: var(--gold);
+        }
+
+        /* АДАПТИВНОСТЬ (МОБИЛЬНЫЕ) */
+        @media (max-width: 768px) {
+            .rooms-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 { font-size: 3rem; }
+            .room-card { height: 60vh; }
+            .room-info { bottom: 20px; left: 20px; }
+            .room-title { font-size: 2.2rem; }
+            .btn-discover { opacity: 1; transform: translateY(0); } /* На мобилках кнопку видно сразу */
+            header { padding: 20px; }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
+
     <header>
-        <a href="#" class="logo">Bellavista</a>
-        <nav>
-            <button class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="nav-links" id="navLinks">
-                <a href="#" class="nav-link">Home</a>
-                <a href="#" class="nav-link">Rooms</a>
-                <a href="#" class="nav-link">Amenities</a>
-                <a href="#" class="nav-link">Location</a>
-                <a href="#" class="nav-link">Contact</a>
-            </div>
-        </nav>
+        <div class="logo">Bellavista</div>
+        <div class="menu-btn">Menu</div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
-        <div class="section-label">/ ROOMS</div>
-        <h1 class="hero-title">The finest way to stay.</h1>
-        <p class="hero-subtitle">Where comfort meets character. Everything you need. Nothing you don't.</p>
+        <p>Accommodation</p>
+        <h1>Rooms & Suites</h1>
     </section>
 
-    <!-- Rooms Section -->
-    <section class="rooms-section container">
-        <div class="rooms-grid" id="roomsGrid">
-            <!-- Room cards will be generated by JavaScript -->
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="faq-section">
-        <div class="container">
-            <div class="faq-header">
-                <div class="section-label">/ FAQ</div>
-                <h2 class="faq-title">Everything you need to know</h2>
-                <p class="faq-subtitle">Plan a seamless and comfortable stay at Bellavista with answers to our most frequently asked questions.</p>
+    <div class="rooms-grid">
+        
+        <a href="#" class="room-card">
+            <div class="room-bg" style="background-image: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="overlay"></div>
+            <div class="room-info">
+                <span class="room-subtitle">2 Guests • 35 m²</span>
+                <h2 class="room-title">Comfort Room</h2>
+                <div class="btn-discover">Discover Room</div>
             </div>
-            
-            <div class="faq-grid">
-                <div class="faq-item">
-                    <h3 class="faq-question">What time is check-in and check-out?</h3>
-                    <p class="faq-answer">Check-in is available from 3:00 PM, and check-out is by 11:00 AM. Early check-in and late check-out may be available upon request and subject to availability.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">Is breakfast included?</h3>
-                    <p class="faq-answer">Yes, a complimentary continental breakfast is included with all room reservations. It is served daily from 7:00 AM to 10:30 AM in our dining area.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">Do you offer parking?</h3>
-                    <p class="faq-answer">We provide complimentary valet parking for all guests. Self-parking options are also available nearby for an additional fee.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">Are pets allowed?</h3>
-                    <p class="faq-answer">We welcome pets up to 25 lbs in our designated pet-friendly rooms for an additional fee of $50 per stay. Please inform us in advance if you plan to bring a pet.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">What is your cancellation policy?</h3>
-                    <p class="faq-answer">Cancellations made 48 hours or more before check-in receive a full refund. Cancellations within 48 hours are subject to a one-night room charge.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">Do you have accessible rooms?</h3>
-                    <p class="faq-answer">Yes, we have several accessible rooms equipped with roll-in showers, grab bars, and wider doorways. Please specify your accessibility needs when booking.</p>
-                </div>
+        </a>
+
+        <a href="#" class="room-card">
+            <div class="room-bg" style="background-image: url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="overlay"></div>
+            <div class="room-info">
+                <span class="room-subtitle">Lake View • 45 m²</span>
+                <h2 class="room-title">Superior Room</h2>
+                <div class="btn-discover">Discover Room</div>
             </div>
-        </div>
-    </section>
+        </a>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2 class="cta-title">Get This Template</h2>
-            <p class="hero-subtitle">Create a free website with Framer, the website builder loved by startups, designers and agencies.</p>
-            <a href="https://framer.com" target="_blank" class="cta-button">Try Framer for Free</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container footer-content">
-            <div class="copyright">© 2026 Bellavista. All rights reserved.</div>
-            <div class="footer-links">
-                <a href="#" class="footer-link">Privacy Policy</a>
-                <a href="#" class="footer-link">Terms of Service</a>
-                <a href="#" class="footer-link">Contact Us</a>
-                <a href="#" class="footer-link">Instagram</a>
+        <a href="#" class="room-card">
+            <div class="room-bg" style="background-image: url('https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="overlay"></div>
+            <div class="room-info">
+                <span class="room-subtitle">Panoramic • 55 m²</span>
+                <h2 class="room-title">Junior Suite</h2>
+                <div class="btn-discover">Discover Room</div>
             </div>
-        </div>
-    </footer>
+        </a>
 
-    <!-- Booking Modal -->
-    <div class="modal" id="bookingModal">
-        <div class="modal-content">
-            <button class="modal-close" id="modalClose">&times;</button>
-            <h3 class="modal-title">Book Your Stay</h3>
-            <form class="modal-form" id="bookingForm">
-                <div class="form-group">
-                    <label class="form-label" for="roomType">Room Type</label>
-                    <input type="text" class="form-input" id="roomType" readonly>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="checkin">Check-in Date</label>
-                    <input type="date" class="form-input" id="checkin" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="checkout">Check-out Date</label>
-                    <input type="date" class="form-input" id="checkout" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="guests">Number of Guests</label>
-                    <select class="form-input" id="guests" required>
-                        <option value="1">1 Guest</option>
-                        <option value="2">2 Guests</option>
-                        <option value="3">3 Guests</option>
-                        <option value="4">4 Guests</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="name">Full Name</label>
-                    <input type="text" class="form-input" id="name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="email">Email Address</label>
-                    <input type="email" class="form-input" id="email" required>
-                </div>
-                
-                <button type="submit" class="form-submit">Complete Booking</button>
-            </form>
-        </div>
+        <a href="#" class="room-card">
+            <div class="room-bg" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="overlay"></div>
+            <div class="room-info">
+                <span class="room-subtitle">Exclusive • 80 m²</span>
+                <h2 class="room-title">Wellness Suite</h2>
+                <div class="btn-discover">Discover Room</div>
+            </div>
+        </a>
+
     </div>
+
 </body>
 </html>
